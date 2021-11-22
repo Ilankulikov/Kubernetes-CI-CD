@@ -90,3 +90,10 @@ Then run the following command in `/Kubernetes-CI-CD/k8s` :
 
 __Finally run the pipeline.__
 
+Result:
+
+Application running after adding some data.
+
+<img src="https://user-images.githubusercontent.com/90269123/142867015-95ef7fcd-9efb-48b9-91de-c651424ed16a.png" width="800" height="400" alt="result">
+
+
