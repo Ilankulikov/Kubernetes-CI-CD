@@ -83,7 +83,7 @@ Create a new YAML in `/Kubernetes-CI-CD/k8s` called `secret.yml` and fill in the
           oktaclient: 
           oktasecret: 
           
-Then run from the `k8s` directory:
+Then run the following command in `/Kubernetes-CI-CD/k8s` :
 
         kubectl apply -f ./secret.yml
 
