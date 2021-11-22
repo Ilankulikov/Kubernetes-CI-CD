@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmap
+  labels:
+    app: bootcampapp
+data:
+  port: '80'
+  host: '0.0.0.0'
+  pgdatabase: 'weightracker'
+  pgport: '5432'
+  hosturl: 'http://20.88.167.69' # External IP of ingress-nginx-controller
+  oktaurl: 'https://dev-41508641.okta.com'
+

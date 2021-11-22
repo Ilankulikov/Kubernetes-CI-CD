@@ -1,0 +1,83 @@
+trigger:
+- master
+- feature/*
+
+pool:
+  new-pool
+
+variables:
+  imageRepository: 'bootcampapp'
+  containerRegistry: 'weighttrackercr.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/app/Dockerfile'
+  tag: '$(Build.BuildId)'
+  artifactName: 'manifests'
+  imagePullSecret: 'superawesomebrilliantsecret-auth'
+
+stages:
+
+- stage: CI
+  jobs:
+  - job: BuildAndPushDocker
+    steps:
+    - task: Docker@2
+      displayName: Build an image 
+      inputs:
+        command: build
+        repository: $(imageRepository)
+        containerRegistry: 'weightrackerACR'
+        dockerfile: $(dockerfilePath)
+        tags: $(tag)
+    - task: Docker@2
+      displayName: Push an image to azure container registry
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      inputs:
+        command: push
+        repository: $(imageRepository)
+        containerRegistry: 'weightrackerACR'
+        tags: $(tag)
+        
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/s/k8s'
+        artifact: '$(artifactName)'
+        publishLocation: 'pipeline'
+
+- stage: Deploy
+  displayName: Deploy to Production
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - deployment: Deploy
+    displayName: 'Deploy to AKS'
+    environment: 'k8s-production.default'
+    strategy:
+      runOnce: 
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: '$(artifactName)'
+              targetPath: '$(Pipeline.Workspace)/manifests'
+
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'createSecret'
+              namespace: 'default'
+              secretType: 'dockerRegistry'
+              secretName: '$(imagePullSecret)'
+              dockerRegistryEndpoint: 'weightrackerACR'
+
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              namespace: 'default'
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/configmap.yml
+              imagePullSecrets: $(imagePullSecret)
+              containers: '$(containerRegistry)/$(imageRepository):$(tag)'
+
+
+

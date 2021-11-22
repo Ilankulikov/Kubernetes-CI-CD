@@ -1,0 +1,79 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: bootcampapp 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bootcampapp
+  template:
+    metadata:
+      labels:
+        app: bootcampapp 
+    spec:
+      containers:
+        - name: bootcampapp 
+          image: weighttrackercr.azurecr.io/bootcampapp
+          ports:
+          - containerPort: 80
+          env:
+          - name: HOST
+            valueFrom:
+              configMapKeyRef:
+                name: app-configmap
+                key: host
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: app-configmap
+                key: port
+          - name: PGHOST
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: pghost
+          - name: PGUSERNAME
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: pgusername
+          - name: PGDATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: app-configmap
+                key: pgdatabase
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: pgpassword
+          - name: PGPORT
+            valueFrom:
+              configMapKeyRef:
+                name: app-configmap
+                key: pgport
+
+          - name: COOKIE_ENCRYPT_PWD
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: cookie_encrypt
+
+          - name: OKTA_ORG_URL
+            valueFrom:
+              configMapKeyRef:
+                name: app-configmap
+                key: oktaurl
+          - name: OKTA_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: oktaclient
+          - name: OKTA_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: oktasecret
+
+            
