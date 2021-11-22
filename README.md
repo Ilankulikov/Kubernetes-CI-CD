@@ -44,7 +44,7 @@ Follow these steps before creating the pipeline:
 
 Create an environment and connect it with AKS cluster that created with Terraform.
 
-<img src="https://user-images.githubusercontent.com/90269123/142786127-2ec1c507-f333-4452-b1ab-ed8d869bdd17.png" width="400" height="500" alt="AKS">
+<img src="https://user-images.githubusercontent.com/90269123/142792505-feb6d1c8-2ad7-4a6b-a7a4-cc68c8de9692.png" width="400" height="500" alt="AKS">
 
 Go to `Project settings` and create new service connection for Azure Container Registry that created with Terraform.
 
