@@ -14,13 +14,13 @@ For this project we will need:
 
 __Create a "FILE_NAME.tfvars" file:__
 
->pg_user          = "Postgres SQL user name"<br/>
-pg_database      = "Postgres SQL database name"<br/>
-pg_password      = "Postgres SQL password"<br/>
-cluster_name     = "AKS cluster name"<br/>
-acr_name         = "ACR name"<br/>
-rg_name          = "Resource group name"<br/>
-env              = "Environment name"
+        pg_user          = "Postgres SQL user name"<br/>
+        pg_database      = "Postgres SQL database name"<br/>
+        pg_password      = "Postgres SQL password"<br/>
+        cluster_name     = "AKS cluster name"<br/>
+        acr_name         = "ACR name"<br/>
+        rg_name          = "Resource group name"<br/>
+        env              = "Environment name"
 
 
 To deploy the infrastructure follow these steps:
